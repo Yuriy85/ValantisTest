@@ -1,0 +1,29 @@
+.container {
+  max-width: $max-width; /* 1 */
+  margin-left: auto; /* 2 */
+  margin-right: auto; /* 2 */
+  padding: 10px 20px; /* 3 */
+  width: 100%; /* 1 */
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.hide-text {
+  overflow: hidden;
+  padding: 0; /* 1 */
+  text-indent: 101%;
+  white-space: nowrap;
+}
+
+.visually-hidden {
+  border: 0;
+  clip: rect(0 0 0 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+}
