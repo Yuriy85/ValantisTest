@@ -40,7 +40,7 @@ function App() {
     if (idsError) {
       console.error(`Идентификатор ошибки: ${(idsError as Error).message}`);
     }
-    getIds(data.valantisApi, data.auth);
+    getIds(data.api, data.auth);
   }, [idsError]);
 
   useEffect(() => {
@@ -48,7 +48,7 @@ function App() {
     if (goodsInfoError) {
       console.error(`Идентификатор ошибки: ${(goodsInfoError as Error).message}`);
     }
-    getGoodsInfo(data.valantisApi, data.auth);
+    getGoodsInfo(data.api, data.auth);
   }, [ids, goodsInfoError, activePage]);
 
   return (
