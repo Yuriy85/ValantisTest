@@ -1,11 +1,17 @@
-
 html {
   box-sizing: border-box;
-  min-height: 100vh;
+  min-width: $min-width;
 }
 
 *,
 *::before,
 *::after {
   box-sizing: inherit;
+}
+
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }

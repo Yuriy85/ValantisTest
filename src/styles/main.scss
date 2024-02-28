@@ -7,7 +7,8 @@
   'abstracts/mixins';
 
 // 2. Vendors
-
+@import
+  'vendors/bootstrap.min';
 // 3. Base stuff
 @import
   'base/base',
@@ -22,7 +23,11 @@
 
 // 5. Components
 @import
-  'components/errorBoundary';
+  'components/errorBoundary',
+  'components/filter',
+  'components/goods',
+  'components/loader',
+  'components/pagination';
 
 // 6. Page-specific styles
 @import
