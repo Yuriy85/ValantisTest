@@ -75,7 +75,6 @@ function App() {
   useEffect(() => {
     if (productsError) {
       console.error(`Идентификатор ошибки: ${(productsError as Error).message}`);
-      return;
     }
     getProducts(data.api, data.auth);
   }, [route, productsError]);
