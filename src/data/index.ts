@@ -15,7 +15,7 @@ interface Data {
 }
 
 const data: Data = {
-  api: 'http://api.valantis.store:40000/',
+  api: '/api/',
   auth: Md5.hashStr(`Valantis_${getTimestamp()}`),
   action: {
     getIds: 'get_ids',
