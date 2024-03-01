@@ -1,6 +1,7 @@
-import { useState } from 'react';
-import { Accordion, Button, Col, Form, Row } from 'react-bootstrap';
+import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { Accordion, Button, Col, Form, Row } from 'react-bootstrap';
+// App utils
 import getRouteParams from '../utils/getRouteParams';
 
 function Filter() {
@@ -11,15 +12,20 @@ function Filter() {
   const [productBrand, setProductBrand] = useState(getRouteParams(route.id, 'brand'));
   const [productPrice, setProductPrice] = useState(getRouteParams(route.id, 'price'));
 
-  const getRoutePath = () =>
-    `/page=1&name=${productName}&brand=${productBrand}&price=${productPrice}`;
+  useEffect(() => {
+    if (!route.id) {
+      setProductName('');
+      setProductBrand('');
+      setProductPrice('');
+    }
+  }, [route]);
 
   return (
     <div className="filter container">
       <Accordion className="filter__accordion" activeKey={accordionOpen ? '1' : ''}>
         <Accordion.Item eventKey="1">
           <Accordion.Header onClick={() => setAccordionOpen(!accordionOpen)}>
-            <span className="filter__title h5 mb-0">Filtration</span>
+            <span className="filter__title h5 mb-0">{`Filtration ${(productName || productBrand || productPrice) && '*'}`}</span>
           </Accordion.Header>
           <Accordion.Body className="filter__form">
             <Form
@@ -27,7 +33,7 @@ function Filter() {
               onSubmit={(event) => {
                 event.preventDefault();
                 setAccordionOpen(false);
-                navigate(getRoutePath());
+                navigate(`/page=1&name=${productName}&brand=${productBrand}&price=${productPrice}`);
               }}
             >
               <Row className="mb-3">

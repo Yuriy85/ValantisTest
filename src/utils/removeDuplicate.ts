@@ -1,6 +1,6 @@
 import { GoodInfo } from '../api/valantis';
 
-export function removeDuplicates(arr: string[]) {
+export function removeIdDuplicates(arr: string[]) {
   const uniqueArray = [];
   const seenElements: { [key: string]: boolean } = {};
 
@@ -15,7 +15,7 @@ export function removeDuplicates(arr: string[]) {
   return uniqueArray;
 }
 
-export function removeDuplicatesFromInfo(arr: GoodInfo[]): GoodInfo[] {
+export function removeInfoDuplicates(arr: GoodInfo[]): GoodInfo[] {
   const uniqueIds: { [key: string]: boolean } = {};
   const uniqueArr: GoodInfo[] = [];
 

@@ -1,4 +1,5 @@
 import { Card } from 'react-bootstrap';
+// App Api
 import { GoodInfo } from '../api/valantis';
 
 interface Props {

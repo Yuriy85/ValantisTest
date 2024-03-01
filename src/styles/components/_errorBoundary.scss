@@ -1,7 +1,8 @@
 .error {
   display: block;
   color: white;
-  background-color: $header-background;
+  background-color: $brand-color;
+
   details {
     white-space: pre-wrap;
     overflow: auto;

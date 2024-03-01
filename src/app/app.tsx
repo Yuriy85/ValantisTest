@@ -1,22 +1,22 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-// Data
+// App Data
 import data from '../data';
-// Api
+// App Api
 import { GoodInfo, postGetGoodsInfo, postGetIds } from '../api/valantis';
-// My components
+// App components
 import Filter from '../components/Filter';
 import Goods from '../components/Goods';
 import Paginate from '../components/Paginate';
 import Loader from '../components/Loader';
-// My utils
-import getPageElements from '../utils/getPage';
-import { removeDuplicates, removeDuplicatesFromInfo } from '../utils/removeDuplicate';
-import getRouteParams from '../utils/getRouteParams';
-// My hooks
-import useFetch from '../hooks/useFetch';
 import NotFoundAlert from '../components/NotFoundAlert';
-import findCommonElements from '../utils/findeCommonElements';
+// App utils
+import getPageElements from '../utils/getPage';
+import { removeIdDuplicates, removeInfoDuplicates } from '../utils/removeDuplicate';
+import findCommonElements from '../utils/findCommonElements';
+import getRouteParams from '../utils/getRouteParams';
+// App hooks
+import useFetch from '../hooks/useFetch';
 
 function App() {
   const route = useParams();
@@ -31,34 +31,35 @@ function App() {
     const idsData: string[] = [];
 
     if (nameFilter || brandFilter || priceFilter) {
-      const idsNameFiltered = [];
-      const idsBrandFiltered = [];
-      const idsPriceFiltered = [];
+      const filteredIds: string[][] = [];
       if (nameFilter) {
-        idsNameFiltered.push(
-          ...(await postGetIds(url, authKey, data.action.filter, { product: nameFilter })).result
+        filteredIds.push(
+          (await postGetIds(url, authKey, data.action.filter, { product: nameFilter })).result
         );
       }
       if (brandFilter) {
-        idsBrandFiltered.push(
-          ...(await postGetIds(url, authKey, data.action.filter, { brand: brandFilter })).result
+        filteredIds.push(
+          (await postGetIds(url, authKey, data.action.filter, { brand: brandFilter })).result
         );
       }
       if (priceFilter) {
-        idsPriceFiltered.push(
-          ...(await postGetIds(url, authKey, data.action.filter, { price: +priceFilter })).result
+        filteredIds.push(
+          (await postGetIds(url, authKey, data.action.filter, { price: +priceFilter })).result
         );
       }
-      idsData.push(
-        ...removeDuplicates(findCommonElements(idsNameFiltered, idsBrandFiltered, idsPriceFiltered))
-      );
+      idsData.push(...removeIdDuplicates(findCommonElements(filteredIds)));
     } else {
       idsData.push(
-        ...removeDuplicates((await postGetIds(url, authKey, data.action.getIds)).result)
+        ...removeIdDuplicates((await postGetIds(url, authKey, data.action.getIds)).result)
       );
     }
 
-    const idsDataWithoutDuplicates = removeDuplicates(idsData);
+    if (!idsData.length) {
+      setGoodsInfo([]);
+      return;
+    }
+
+    const idsDataWithoutDuplicates = removeIdDuplicates(idsData);
     setIds(idsDataWithoutDuplicates);
     const idsDataPerPage = getPageElements(
       idsDataWithoutDuplicates,
@@ -68,16 +69,15 @@ function App() {
     const goodsInfoData = (
       await postGetGoodsInfo(url, authKey, data.action.getItems, { ids: idsDataPerPage })
     ).result;
-    setGoodsInfo(removeDuplicatesFromInfo(goodsInfoData));
+    setGoodsInfo(removeInfoDuplicates(goodsInfoData));
   });
 
   useEffect(() => {
     if (productsError) {
       console.error(`Идентификатор ошибки: ${(productsError as Error).message}`);
     }
-
     getProducts(data.api, data.auth);
-  }, [productsError, route]);
+  }, [route, productsError]);
 
   return (
     <>

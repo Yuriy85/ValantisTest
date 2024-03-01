@@ -1,28 +1,28 @@
 import axios from 'axios';
 
-export interface GoodInfo {
-  brand: string;
-  id: string;
-  price: number;
-  product: string;
-}
-
-export interface GoodsInfo {
+interface GoodsInfo {
   result: GoodInfo[];
 }
 
-export interface Ids {
+interface Ids {
   result: string[];
 }
 
-export interface FilterParams {
+interface FilterParams {
   product?: string;
   price?: number;
   brand?: string;
 }
 
-export interface GoodsParams {
+interface GoodsParams {
   [key: string]: string[];
+}
+
+export interface GoodInfo {
+  brand: string;
+  id: string;
+  price: number;
+  product: string;
 }
 
 export const postGetIds = async (
@@ -41,7 +41,6 @@ export const postGetIds = async (
     params,
   };
   const data: Ids = (await axios.post(url, postData, config)).data;
-  console.log(1);
 
   return data;
 };
@@ -62,7 +61,6 @@ export const postGetGoodsInfo = async (
     params,
   };
   const data: GoodsInfo = (await axios.post(url, postData, config)).data;
-  console.log(2);
 
   return data;
 };

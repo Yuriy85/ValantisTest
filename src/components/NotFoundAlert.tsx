@@ -5,7 +5,7 @@ function NotFoundAlert() {
   const navigate = useNavigate();
 
   return (
-    <div className="not-found-alert container">
+    <div className="container">
       <Alert show={true}>
         <Alert.Heading>Ooops!</Alert.Heading>
         <p>Sorry, nothing found, please try entering a different query or go to home.</p>

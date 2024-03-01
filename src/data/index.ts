@@ -1,4 +1,5 @@
 import { Md5 } from 'ts-md5';
+//App utils
 import getTimestamp from '../utils/getTimestamp';
 
 interface Data {
@@ -14,7 +15,7 @@ interface Data {
 }
 
 const data: Data = {
-  api: 'http://api.valantis.store:40000/',
+  api: 'https://api.valantis.store:40000/',
   auth: Md5.hashStr(`Valantis_${getTimestamp()}`),
   action: {
     getIds: 'get_ids',
