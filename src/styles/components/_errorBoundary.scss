@@ -1,0 +1,12 @@
+.error {
+  display: block;
+  color: white;
+  background-color: $brand-color;
+
+  details {
+    white-space: pre-wrap;
+    overflow: auto;
+    scrollbar-width: thin;
+    scrollbar-color: rgb(68 68 68 / 50%) rgb(153 153 153 / 50%);
+  }
+}

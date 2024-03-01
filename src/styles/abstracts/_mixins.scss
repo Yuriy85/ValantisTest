@@ -1,0 +1,14 @@
+/// Mixin for Map breakpoints
+@mixin breakpoint($size) {
+  $breakpoint: map-get($breakpoints, $size);
+  @media (max-width: $breakpoint) {
+    @content;
+  }
+}
+
+// Cursor
+@mixin pointer {
+  @media (hover: hover) {
+    cursor: pointer;
+  }
+}
