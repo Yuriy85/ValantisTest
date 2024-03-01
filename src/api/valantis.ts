@@ -15,11 +15,22 @@ export interface Ids {
   result: string[];
 }
 
-export interface PostParams {
+export interface FilterParams {
+  product?: string;
+  price?: number;
+  brand?: string;
+}
+
+export interface GoodsParams {
   [key: string]: string[];
 }
 
-export const postGetIds = async (url: string, authKey: string, action: string): Promise<Ids> => {
+export const postGetIds = async (
+  url: string,
+  authKey: string,
+  action: string,
+  params: FilterParams = {}
+): Promise<Ids> => {
   const config = {
     headers: {
       'X-Auth': authKey,
@@ -27,6 +38,7 @@ export const postGetIds = async (url: string, authKey: string, action: string): 
   };
   const postData = {
     action,
+    params,
   };
   const data: Ids = (await axios.post(url, postData, config)).data;
   console.log(1);
@@ -38,7 +50,7 @@ export const postGetGoodsInfo = async (
   url: string,
   authKey: string,
   action: string,
-  params: PostParams
+  params: GoodsParams
 ): Promise<GoodsInfo> => {
   const config = {
     headers: {

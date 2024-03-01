@@ -1,64 +1,99 @@
-import { Dispatch, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Alert, Button, Form, Pagination } from 'react-bootstrap';
 import data from '../data';
+import { useNavigate, useParams } from 'react-router-dom';
+import getRouteParams from '../utils/getRouteParams';
 
 interface Props {
   ids: string[] | undefined;
-  activePage: number;
-  setActivePage: Dispatch<React.SetStateAction<number>>;
 }
 
-export default function Paginate(props: Props) {
+export default function Paginate({ ids }: Props) {
+  const navigate = useNavigate();
+  const route = useParams();
+  const [activePage, setActivePage] = useState(getRouteParams(route.id, 'page') || '1');
+  const [pagesCount, setPagesCount] = useState(0);
   const [showAlert, setShowAlert] = useState(false);
   const [alertValue, setAlertValue] = useState('');
 
-  const pagesCount = props.ids && Math.floor(props.ids.length / data.elementsPerPage);
+  useEffect(() => {
+    if (!route.id) return;
+    setActivePage(getRouteParams(route.id, 'page'));
+  }, [route]);
+
+  useEffect(() => {
+    if (!ids) return;
+    setPagesCount(ids && Math.floor(ids.length / data.elementsPerPage));
+  }, [ids]);
+
+  const getRoutePath = (page: string) => {
+    if (route?.id?.includes('name')) {
+      const productName = getRouteParams(route.id, 'name');
+      const productBrand = getRouteParams(route.id, 'brand');
+      const productPrice = getRouteParams(route.id, 'price');
+      return `/page=${page}&name=${productName}&brand=${productBrand}&price=${productPrice}`;
+    } else {
+      return `/page=${page}`;
+    }
+  };
+
+  const isPageInRange = (page: string, pageCount: number) =>
+    +page < 1 || +page > pageCount || isNaN(+page);
 
   const setNewPage = (page: string, pageCount: number | undefined) => {
     if (!page) {
       setShowAlert(false);
       return;
     }
-    if (pageCount && (+page < 1 || +page > pageCount || isNaN(+page))) {
+    if (pageCount && isPageInRange(page, pageCount)) {
       setAlertValue('');
       return;
     }
-    props.setActivePage(+page);
+    navigate(getRoutePath(page));
     setAlertValue('');
     setShowAlert(false);
   };
 
   return (
-    <div className="paginate container">
-      <Alert className="paginate__alert" variant="secondary" show={showAlert}>
+    <div
+      className={
+        !isPageInRange(activePage, pagesCount)
+          ? 'paginate container'
+          : 'paginate visually-hidden container'
+      }
+    >
+      <Alert className="paginate__alert" show={showAlert}>
         <Form.Control
           onKeyDown={(event) => event.key === 'Enter' && setNewPage(alertValue, pagesCount)}
           onChange={(event) => setAlertValue(event.target.value)}
           placeholder={`Choose page 1...${pagesCount}`}
           value={alertValue}
         />
-        <Button onClick={() => setNewPage(alertValue, pagesCount)} variant="secondary">
-          Submit
-        </Button>
+        <Button onClick={() => setNewPage(alertValue, pagesCount)}>Submit</Button>
       </Alert>
 
-      <Pagination className="m-0">
-        <Pagination.First
-          disabled={props.activePage === 1}
-          onClick={() => props.setActivePage(1)}
-        />
+      <Pagination className="paginate__menu m-0">
+        <Pagination.First disabled={activePage === '1'} onClick={() => navigate('/page=1')} />
         <Pagination.Prev
-          disabled={props.activePage === 1}
-          onClick={() => props.setActivePage(props.activePage - 1)}
+          disabled={activePage === '1'}
+          onClick={() => {
+            navigate(getRoutePath(`${+activePage - 1}`));
+          }}
         />
-        <Pagination.Item onClick={() => setShowAlert(true)}>{props.activePage}</Pagination.Item>
+        <Pagination.Item onClick={() => setShowAlert(true)}>{activePage}</Pagination.Item>
         <Pagination.Next
-          disabled={props.activePage === pagesCount}
-          onClick={() => props.setActivePage(props.activePage + 1)}
+          disabled={+activePage === pagesCount}
+          onClick={() => {
+            navigate(getRoutePath(`${+activePage + 1}`));
+          }}
         />
         <Pagination.Last
-          disabled={props.activePage === pagesCount}
-          onClick={() => pagesCount && props.setActivePage(pagesCount)}
+          disabled={+activePage === pagesCount}
+          onClick={() => {
+            if (pagesCount) {
+              navigate(getRoutePath(`${pagesCount}`));
+            }
+          }}
         />
       </Pagination>
     </div>

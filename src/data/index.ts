@@ -4,7 +4,12 @@ import getTimestamp from '../utils/getTimestamp';
 interface Data {
   api: string;
   auth: string;
-  action: { getIds: string; getItems: string; filter: string };
+  action: {
+    getIds: string;
+    getItems: string;
+    filter: string;
+    getFields: string;
+  };
   elementsPerPage: number;
 }
 
@@ -15,6 +20,7 @@ const data: Data = {
     getIds: 'get_ids',
     getItems: 'get_items',
     filter: 'filter',
+    getFields: 'get_fields',
   },
   elementsPerPage: 50,
 };

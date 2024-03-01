@@ -1,7 +1,7 @@
 .goods {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-
+  min-height: 50vh;
   @include breakpoint('large') {
     grid-template-columns: repeat(3, 1fr);
   }
